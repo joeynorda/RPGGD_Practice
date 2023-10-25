@@ -14,7 +14,7 @@ public class SelectRole : MonoBehaviour
     private string roleItemPath = "UI/SelectRole/RoleItem";
 
     private int _selectRoleIndex = -1;
-    private int _lastRoleIndex = 2;
+    private int _lastRoleIndex = 1;
 
     [SerializeField] private Transform _placeTrans;
 
@@ -70,8 +70,6 @@ public class SelectRole : MonoBehaviour
 
     private void OnToggleValueChanged(int index,bool isOn)
     {
-        Debug.Log("<color=#7FFF00><size=12>" + $"{index},{isOn}" + "</size></color>");
-
         if (isOn)
         {
             if (index == _selectRoleIndex) return;
@@ -82,8 +80,6 @@ public class SelectRole : MonoBehaviour
             _selectRoleIndex = index;
 
             var curRoleInfo = RoleTable.Instance[index];
-
-            Debug.Log("<color=#7FFF00><size=12>" + $"{curRoleInfo.ToString()}" + "</size></color>");
 
             var model = GameObject.Instantiate(Resources.Load<GameObject>(curRoleInfo.ModelPath));
             model.transform.SetParent(_placeTrans, false);
