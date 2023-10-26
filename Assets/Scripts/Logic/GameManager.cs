@@ -21,13 +21,13 @@ public class GameManager:Singleton<GameManager>
 
         foreach (var item in RoleTable.Instance.GetAll().Values)
         {
-            Debug.Log("<color=#7FFF00><size=12>" + $"{item.Name}" + "</size></color>");
+            Debug.Log("<color=#7FFF00><size=12>" + $"{item.ID}   {item.Name}" + "</size></color>");
         }
 
 
-        foreach (var item in NpcTable.Instance.GetAll().Values)
-        {
-            Debug.Log("<color=#7FFF00><size=12>" + $"{item.Name}" + "</size></color>");
-        }
+        //foreach (var item in NpcTable.Instance.GetAll().Values)
+        //{
+        //    Debug.Log("<color=#7FFF00><size=12>" + $"{item.Name}" + "</size></color>");
+        //}
     }
 }

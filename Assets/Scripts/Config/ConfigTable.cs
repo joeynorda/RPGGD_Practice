@@ -12,6 +12,13 @@ public class TableDatabase
     public int ID;
 }
 
+/// <summary>
+/// 开发期和打包分开
+/// </summary>
+/// <typeparam name="TDataBase"></typeparam>
+/// <typeparam name="T"></typeparam>
+
+
 //表格 基类 
 //T ：数据类型
 public class ConfigTable<TDataBase, T> : Singleton<T>
@@ -31,12 +38,26 @@ public class ConfigTable<TDataBase, T> : Singleton<T>
     /// 读取表文件 以二进制方式读取 
     /// //表的读取方式一样
     /// </summary>
-    /// <param name="configPath"></param>  不同： 配置文件路径不同
-    protected void Load(string configPath) 
+    /// <param name="tablePath"></param>  不同： 配置文件路径不同
+    protected void Load(string tablePath) 
     {
+        MemoryStream tableStream;
+
+        //预定义
+        //开发期 读 Project/Config
+
+#if UNITY_EDITOR
+        var tableBytes = File.ReadAllBytes(Application.dataPath + "/../" + tablePath);
+        tableStream = new MemoryStream(tableBytes);
+#else
+        //发布之后 读 Resources/Config
         //读表内数据
         var table = Resources.Load<TextAsset>(configPath);      //二进制格式 读取 
-        var tableStream = new MemoryStream(table.bytes);
+        tableStream = new MemoryStream(table.bytes);
+#endif
+
+
+
         using (var reader = new StreamReader(tableStream, Encoding.GetEncoding("gb2312")))
         {
             //跳过第一行 读取的是字段名称

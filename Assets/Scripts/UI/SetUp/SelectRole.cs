@@ -46,7 +46,7 @@ public class SelectRole : MonoBehaviour
 
         foreach (var roleIno in RoleTable.Instance.GetAll().Values)
         {
-            var roleItem =GameObject.Instantiate(Resources.Load<GameObject>(roleItemPath));
+            var roleItem = ResMgr.Instance.GetInstance(roleItemPath); 
 
             var textName = roleItem.transform.Find<TextMeshProUGUI>("Label");
 
@@ -81,7 +81,8 @@ public class SelectRole : MonoBehaviour
 
             var curRoleInfo = RoleTable.Instance[index];
 
-            var model = GameObject.Instantiate(Resources.Load<GameObject>(curRoleInfo.ModelPath));
+            var model = ResMgr.Instance.GetInstance(curRoleInfo.ModelPath);
+            //var model = GameObject.Instantiate(Resources.Load<GameObject>(curRoleInfo.ModelPath));
             model.transform.SetParent(_placeTrans, false);
         }
     }
