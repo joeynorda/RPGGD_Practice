@@ -29,13 +29,44 @@ public class Login : MonoBehaviour
 
     private void OnBtnOKClick()
     {
+
+        //发送
+        var account = _accountInput.text;
+        var password = _passwordInput.text;
+        if (string.IsNullOrEmpty(account) || string.IsNullOrEmpty(password))
+        {
+            return;
+        }
+
+        _accountInput.enabled = false;
+        _passwordInput.enabled = false;
+        _btnOK.interactable = false;
+
         //连接服务器 等待返回数据
+        Net.Instance.ConnectServer(DoSuccess,DoFailed);
 
-        //假数据代替
-
-        SceneManager.LoadScene("SelectRole");
-
-        Debug.Log("<color=#7FFF00><size=12>" + $"btn ok" + "</size></color>");
+        //SceneManager.LoadScene("SelectRole");
     }
 
+    /// <summary>
+    /// 连接服务器失败回调
+    /// </summary>
+    private void DoFailed()
+    {
+        _accountInput.enabled = true;
+        _passwordInput.enabled = true;
+        _btnOK.interactable = true;
+    }
+
+
+    /// <summary>
+    /// 连接成功回调
+    /// </summary>
+    private void DoSuccess()
+    {
+        var account = _accountInput.text;
+        var password = _passwordInput.text;
+        var cmd = new LoginCmd() { Account = account, Password = password };
+        Net.Instance.SendCmd(cmd);
+    }
 }

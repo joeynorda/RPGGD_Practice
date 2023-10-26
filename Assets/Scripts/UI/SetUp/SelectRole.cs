@@ -79,9 +79,13 @@ public class SelectRole : MonoBehaviour
 
             _selectRoleIndex = index;
 
-            var curRoleInfo = RoleTable.Instance[index];
 
-            var model = ResMgr.Instance.GetInstance(curRoleInfo.ModelPath);
+            var curRoleInfo = UserData.Instance.AllRole[index];
+
+            var modelPath = RoleTable.Instance[curRoleInfo.ModelID].ModelPath;
+
+            var model = ResMgr.Instance.GetInstance(modelPath);
+
             //var model = GameObject.Instantiate(Resources.Load<GameObject>(curRoleInfo.ModelPath));
             model.transform.SetParent(_placeTrans, false);
         }

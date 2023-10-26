@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class EasyEditor:Editor
 {
-    //配置文件放置在 Resources 路径下
+    //配置文件放置在
+    //Resources 路径下
 
 
     [MenuItem("Custom/ConfigToResources")]

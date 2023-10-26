@@ -1,23 +1,37 @@
+using System;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
-
-//角色结构
-public class SelectRoleInfo
+public class UserData : Singleton<UserData>
 {
-    public string Name;     //角色名
-    public string ResPath;  //模型资源路径
-}
 
-
-public  class UserData:Singleton<UserData>
-{
     public List<SelectRoleInfo> AllRole = new List<SelectRoleInfo>();
 
-
-    public UserData()
+    internal static void OnRoleList(Cmd cmd)
     {
-        AllRole.Add(new SelectRoleInfo() { Name = "Joe1", ResPath = "Prefabs/Character_Hero_Knight_Male 1" });
-        AllRole.Add(new SelectRoleInfo() { Name = "Loda2", ResPath = "Prefabs/Character_Knight_02_Orange 1" });
-        AllRole.Add(new SelectRoleInfo() { Name = "Mipo3", ResPath = "Prefabs/Character_Hero_Knight_Female 1" });
+        //cmd -> LoginCmd
+        RoleListCmd roleListCmd = cmd as RoleListCmd;
+        if (roleListCmd == null)
+        {
+            Debug.LogError(string.Format("需要{0},但是收到了{1}", typeof(RoleListCmd), cmd.GetType()));
+            return;
+        }
+
+
+        UserData.Instance.AllRole = roleListCmd.AllRole;
+
+
+        //之前已经创建过界面
+        if (roleListCmd.AllRole.Count > 0)
+        {
+            //选人界面
+            SceneManager.LoadScene("SelectRole");
+        }
+        else
+        {
+            //角色创建界面
+        }
+
     }
 }
