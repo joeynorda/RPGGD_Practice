@@ -35,6 +35,21 @@ public class Net : Singleton<Net>, IClient
 
         //客户端接收角色列表信息 
         _parser.Add(typeof(RoleListCmd), UserData.OnRoleList);
+
+
+        //当前主角id
+        _parser.Add(typeof(MainRoleThisIDCmd), RoleMgr.OnMainRoleThisid);
+
+
+        //进入地图
+        _parser.Add(typeof(EnterMapCmd), SceneMgr.OnEnterMap);
+
+      
+
+        //创建角色
+        _parser.Add(typeof(CreateSceneRoleCmd), RoleMgr.OnCreateSceneRole);
+
+
     }
 
 
@@ -87,6 +102,24 @@ public class Net : Singleton<Net>, IClient
     public void SendCmd(Cmd cmd)
     {
         _server.Recive(cmd);
+    }
+
+
+
+    /// <summary>
+    /// 检查消息Cmd 是否是目标类型
+    /// </summary>
+    /// <param name="cmd"></param>
+    /// <param name="targetType"></param>
+    /// <returns></returns>
+    public static bool CheckCmd(Cmd cmd,Type targetType)
+    {
+        if (cmd.GetType() != targetType)
+        {
+            Debug.LogError(string.Format("需要{0},但是收到了{1}", targetType, cmd.GetType()));
+            return false;
+        }
+        return true;
     }
 }
 

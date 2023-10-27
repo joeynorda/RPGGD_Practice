@@ -13,16 +13,14 @@ public class UserData : Singleton<UserData>
     internal static void OnRoleList(Cmd cmd)
     {
         //cmd -> LoginCmd
-        RoleListCmd roleListCmd = cmd as RoleListCmd;
-        if (roleListCmd == null)
+        if (!Net.CheckCmd(cmd, typeof(RoleListCmd)))
         {
-            Debug.LogError(string.Format("需要{0},但是收到了{1}", typeof(RoleListCmd), cmd.GetType()));
             return;
         }
 
+        RoleListCmd roleListCmd = cmd as RoleListCmd;
 
         UserData.Instance.AllRole = roleListCmd.AllRole;
-
 
         //之前已经创建过界面
         if (roleListCmd.AllRole.Count > 0)

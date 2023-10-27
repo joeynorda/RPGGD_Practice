@@ -34,8 +34,12 @@ public class Server : Singleton<Server>, IServer
     {
 
         //消息解析字典
+
+        //登录消息
         _parser.Add(typeof(LoginCmd), CmdParser.OnLogin);
 
+        //角色选择消息
+        _parser.Add(typeof(SelectRoleCmd), CmdParser.OnSelectRole);
     }
 
 

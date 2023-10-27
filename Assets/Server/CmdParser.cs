@@ -8,16 +8,20 @@ using UnityEngine;
 //消息解析函数 未分模块的消息解析器
 public static class CmdParser
 {
+
+
+    /// <summary>
+    /// 登录
+    /// </summary>
+    /// <param name="cmd"></param>
     public static void OnLogin(Cmd cmd)
     {
-        //cmd -> LoginCmd
-        LoginCmd loginCmd =cmd as LoginCmd;
-        if (loginCmd == null)
+        if (!Net.CheckCmd(cmd, typeof(LoginCmd)))
         {
-            Debug.LogError(string.Format("需要{0},但是收到了{1}", typeof(LoginCmd), cmd.GetType()));
             return;
         }
 
+        LoginCmd loginCmd = cmd as LoginCmd;
         //验证账号密码
 
 
@@ -50,19 +54,54 @@ public static class CmdParser
 
 
 
-
-
     /// <summary>
-    /// 客户端接收到服务器返回的角色列表消息i
+    /// 角色选择
     /// </summary>
     /// <param name="cmd"></param>
-    public static void OnRoleList(Cmd cmd)
+    public static void OnSelectRole(Cmd cmd)
     {
+        if (!Net.CheckCmd(cmd, typeof(SelectRoleCmd)))
+        {
+            return;
+        }
+
+        SelectRoleCmd selectRoleCmd = cmd as SelectRoleCmd;
+
+
+        //获取服务器当前 角色信息
+        SelectRoleInfo curRole = Server.Instance.CurPlayer.AllRole[selectRoleCmd.Index];
+
+
+        //向客户端发送一个能进场景的消息
+
+        //1.告诉客户端进入的场景编号
+        var sceneID = 2;
+        EnterMapCmd enterMapCmd = new EnterMapCmd() { MapID = sceneID };
         
+
+        //2.分配ThisID 
+        var thisid = RoleServer.GetNewThisID();
+
+        //3.Thisid,//告诉客户端可操控角色 主角ID   主、配角 
+        MainRoleThisIDCmd mainRoleThisIDCmd = new MainRoleThisIDCmd() { ThisID = thisid };
+        
+
+        //4.生成主角 CreateSceneRole
+        CreateSceneRoleCmd roleCmd = new CreateSceneRoleCmd();
+        roleCmd.ThisID = thisid;
+        roleCmd.Name = curRole.Name;
+        roleCmd.ModelID = curRole.ModelID;
+        roleCmd.Pos = Vector3.zero;
+        roleCmd.FaceTo = Vector3.forward;
+
+        Server.Instance.SendCmd(enterMapCmd);
+        Server.Instance.SendCmd(mainRoleThisIDCmd);
+        Server.Instance.SendCmd(roleCmd);
+
+
+        //5.生成附近的配角 (暂时不考虑)
+        //6.生成附近的NPC
+
     }
-
-
-
-
 
 }

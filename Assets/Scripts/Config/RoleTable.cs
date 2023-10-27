@@ -28,11 +28,5 @@ public class RoleTable:ConfigTable<RoleDataBase, RoleTable>
     {
         Load(roleConfigPath);
     }
-
-    //protected override void ParseItem(RoleDataBase data, string[] itemArray)
-    //{
-    //    data.Name = itemArray[1];
-    //    data.ModelPath = itemArray[2];
-    //}
 }
 

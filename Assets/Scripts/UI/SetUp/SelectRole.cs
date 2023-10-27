@@ -94,6 +94,8 @@ public class SelectRole : MonoBehaviour
 
     private void OnBtnEnterClick()
     {
-
+        //进入场景 发送一个选中角色消息
+        SelectRoleCmd selectRoleCmd = new SelectRoleCmd() { Index = _selectRoleIndex};
+        Net.Instance.SendCmd(selectRoleCmd);
     }
 }
