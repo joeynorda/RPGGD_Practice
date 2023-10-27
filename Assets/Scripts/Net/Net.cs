@@ -11,18 +11,10 @@ public interface IClient
 }
 
 
-public interface IServer
-{
-
-    //连接服务器
-    void Connect(IClient client);
-
-    void SendCmd(Cmd cmd);
-    void Recive(Cmd cmd);
-}
 
 
 
+//本地客户端
 //和服务器交互 
 //1.客户端直接访问服务器代码
 //2.逻辑上的服务器  和服务器的交互 模块
@@ -61,6 +53,7 @@ public class Net : Singleton<Net>, IClient
 
         if (true)
         {
+            Debug.Log("<color=#7FFF00><size=12>" + $"连接服务器成功!" + "</size></color>");
             successCallback?.Invoke();
         }
         else

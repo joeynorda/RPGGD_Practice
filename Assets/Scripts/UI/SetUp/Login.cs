@@ -42,6 +42,10 @@ public class Login : MonoBehaviour
         _passwordInput.enabled = false;
         _btnOK.interactable = false;
 
+
+
+        Debug.Log("<color=#7FFF00><size=12>" + $"点击连接服务器.." + "</size></color>");
+
         //连接服务器 等待返回数据
         Net.Instance.ConnectServer(DoSuccess,DoFailed);
 
@@ -66,6 +70,10 @@ public class Login : MonoBehaviour
     {
         var account = _accountInput.text;
         var password = _passwordInput.text;
+
+        Debug.Log("<color=#7FFF00><size=12>" + $"连接服务器成功后  给服务器发送LoginCommand" + "</size></color>");
+
+        //连接服务器成功后  给服务器发送LoginCommand
         var cmd = new LoginCmd() { Account = account, Password = password };
         Net.Instance.SendCmd(cmd);
     }

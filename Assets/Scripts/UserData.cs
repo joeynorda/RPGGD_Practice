@@ -8,6 +8,8 @@ public class UserData : Singleton<UserData>
 
     public List<SelectRoleInfo> AllRole = new List<SelectRoleInfo>();
 
+
+
     internal static void OnRoleList(Cmd cmd)
     {
         //cmd -> LoginCmd
