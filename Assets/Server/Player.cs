@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 /// </summary>
 public class Player
 {
+
+    //持有玩家 所拥有的角色列表
     public List<SelectRoleInfo> AllRole = new List<SelectRoleInfo>();
 
 

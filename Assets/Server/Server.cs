@@ -3,6 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public interface IServer
+{
+
+    //连接服务器 并给当前连接的客户端赋值
+    void Connect(IClient client);
+
+    void SendCmd(Cmd cmd);
+
+    void Recive(Cmd cmd);
+}
+
 /// <summary>
 /// 服务器
 /// </summary>
@@ -29,13 +40,15 @@ public class Server : Singleton<Server>, IServer
 
 
 
-    //客户端连接后调用 1对多
+    //客户端连接后调用  1对多
     public void Connect(IClient client)
     {
         this._client = client;
     }
 
 
+
+    //服务器端接收客户端消息 
     public void Recive(Cmd cmd)
     {
         //_client.send

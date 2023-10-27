@@ -42,6 +42,8 @@ public static class CmdParser
         }
 
 
+        Debug.Log("<color=#7FFF00><size=12>" + $"服务器接收到客户端的登录消息，验证成功后 返回用户角色列表" + "</size></color>");
+
         //发送客户端
         Server.Instance.SendCmd(roleListCmd);
     }
