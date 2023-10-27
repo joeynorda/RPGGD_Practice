@@ -10,6 +10,9 @@ public class GameManager:Singleton<GameManager>
 {
     public void Init()
     {
+        //协程初始化
+        QuickCoroutine.Instance.Init();
+
 
         //启动引擎 逻辑
 

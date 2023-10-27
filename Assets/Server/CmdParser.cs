@@ -94,8 +94,22 @@ public static class CmdParser
         roleCmd.Pos = Vector3.zero;
         roleCmd.FaceTo = Vector3.forward;
 
-        Server.Instance.SendCmd(enterMapCmd);
-        Server.Instance.SendCmd(mainRoleThisIDCmd);
+
+        //发送消息
+        Server.Instance.SendCmd(enterMapCmd);//告诉客户端进入新场景
+
+
+
+        // 场景加载完毕后 再执行剩下的消息
+
+        //客户端加载慢   
+
+        //缓存剩下消息   //加载完成后 在分发消息
+
+        Server.Instance.SendCmd(mainRoleThisIDCmd); //进入新场景后 才执行以后消息 服务器认为已经进入场景了 
+
+        //
+        
         Server.Instance.SendCmd(roleCmd);
 
 

@@ -19,6 +19,10 @@ public class RoleMgr : Singleton<RoleMgr>
 
     int _mainRoleThisID;
 
+    //thisID,role
+    public Dictionary<int, Role> AllRole = new Dictionary<int, Role>();
+
+
 
     //记录当前角色ID
     internal static void OnMainRoleThisid(Cmd cmd)
@@ -42,8 +46,40 @@ public class RoleMgr : Singleton<RoleMgr>
         {
             return;
         }
-        CreateSceneRoleCmd createRol = cmd as CreateSceneRoleCmd;
+        CreateSceneRoleCmd createRole = cmd as CreateSceneRoleCmd;
 
-        Debug.LogError(createRol);
+        RoleDataBase roleDataBase = RoleTable.Instance[createRole.ModelID];
+        if (roleDataBase == null)
+        {
+            Debug.LogError("未找到角色模型："+createRole.ModelID);
+            return;
+        }
+
+        //添加角色
+        //创建角色模型   //创建Role脚本  挂载在模型上  
+        var roleObj = ResMgr.Instance.GetInstance(roleDataBase.ModelPath);
+
+        Debug.Log("<color=#7FFF00><size=12>" + $"{roleObj.name}-----------------------" + "</size></color>");
+
+        Role role;
+
+        //判断主角
+        if (RoleMgr.Instance._mainRoleThisID == createRole.ThisID)
+        {
+            //是主角
+            role = roleObj.AddComponent<MainRole>();
+        }
+        else
+        {
+            role = roleObj.AddComponent<Role>();
+        }
+
+       
+        role.Initialize(createRole, roleDataBase);
+
+        //RoleMgr 管理场景中所有Role
+        Instance.AllRole[createRole.ThisID] = role;
+        
+
     }
 }

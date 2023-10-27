@@ -10,6 +10,8 @@ public class Setup : MonoBehaviour
     private void Awake()
     {
 
+        
+
 
         GameManager.Instance.Init();
     }

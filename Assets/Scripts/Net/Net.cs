@@ -28,6 +28,26 @@ public class Net : Singleton<Net>, IClient
     Dictionary<Type, Action<Cmd>> _parser = new Dictionary<Type, Action<Cmd>>();
 
 
+    //消息缓存
+    List<Cmd> _cache = new List<Cmd>();
+
+
+    //当前是否在阻塞状态
+    private bool _pause;
+
+    //消息是否阻塞 不处理
+    public bool Pause
+    {
+        get { return _pause; }
+        set 
+        {
+            _pause = value;
+            if (!_pause)
+            {
+                Recive(null);
+            }
+        }
+    }
 
     public Net()
     {
@@ -44,7 +64,7 @@ public class Net : Singleton<Net>, IClient
         //进入地图
         _parser.Add(typeof(EnterMapCmd), SceneMgr.OnEnterMap);
 
-      
+
 
         //创建角色
         _parser.Add(typeof(CreateSceneRoleCmd), RoleMgr.OnCreateSceneRole);
@@ -58,7 +78,7 @@ public class Net : Singleton<Net>, IClient
     /// </summary>
     /// <param name="successCallback">连接成功</param>
     /// <param name="failedCallback">连接失败</param>
-    public void ConnectServer(Action successCallback,Action failedCallback)
+    public void ConnectServer(Action successCallback, Action failedCallback)
     {
         //给变量 _server 赋值
         _server = Server.Instance;
@@ -84,15 +104,31 @@ public class Net : Singleton<Net>, IClient
     //客户端接收消息 相当于 服务器发送消息
     public void Recive(Cmd cmd)
     {
-        //_server.Send();
-        Debug.Log("<color=#7FFF00><size=12>" + $"客户端接收到消息：{cmd.GetType()}" + "</size></color>");
 
-
-        //客户端消息分发
-        if (_parser.TryGetValue(cmd.GetType(), out Action<Cmd> func))
+        if (cmd != null)
         {
-            func.Invoke(cmd);
+            _cache.Add(cmd);
         }
+
+
+        //阻塞状态 则不解析
+        if (Pause)
+        {
+            return;
+        }
+
+
+        //消息缓存
+        //list 消息顺序一致
+        foreach (var cacheCmd in _cache)
+        {
+            //客户端消息分发
+            if (_parser.TryGetValue(cacheCmd.GetType(), out Action<Cmd> func))
+            {
+                func.Invoke(cacheCmd);
+            }
+        }
+        _cache.Clear();
 
     }
 
