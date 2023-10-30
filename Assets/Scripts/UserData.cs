@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class UserData : Singleton<UserData>
 {
 
-    public List<SelectRoleInfo> AllRole = new List<SelectRoleInfo>();
+    public List<RoleServer> AllRole = new List<RoleServer>();
 
 
 

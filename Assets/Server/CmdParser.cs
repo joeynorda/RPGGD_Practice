@@ -29,7 +29,17 @@ public static class CmdParser
 
 
         //获取玩家存档
-        Server.Instance.CurPlayer = new Player();
+        //去数据库里面找寻存档
+
+        var playerData = Server.Instance.DB.GerUserData(1);
+        if (playerData == null)
+        {
+            playerData = new Player();
+            playerData.ThisID = 1;
+            Server.Instance.DB.SavePlayerData(playerData);
+        }
+
+        Server.Instance.CurPlayer = playerData;
 
         //向客户端发送玩家的已创建的角色列表 发送给客户端
         RoleListCmd roleListCmd = new RoleListCmd();
@@ -40,7 +50,7 @@ public static class CmdParser
         //需要使用深拷贝 每一个数据都拷贝一份
         foreach (var role in Server.Instance.CurPlayer.AllRole)
         {
-            var roleInfo = new SelectRoleInfo() { Name = role.Name, ModelID = role.ModelID };
+            var roleInfo = new RoleServer() { Name = role.Name, ModelID = role.ModelID };
 
             roleListCmd.AllRole.Add(roleInfo);
         }
@@ -69,7 +79,7 @@ public static class CmdParser
 
 
         //获取服务器当前 角色信息
-        SelectRoleInfo curRole = Server.Instance.CurPlayer.AllRole[selectRoleCmd.Index];
+        RoleServer curRole = Server.Instance.CurPlayer.AllRole[selectRoleCmd.Index];
 
 
         //向客户端发送一个能进场景的消息

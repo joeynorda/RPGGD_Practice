@@ -32,7 +32,7 @@ public class LoginCmd : Cmd
 public class RoleListCmd : Cmd
 {
     //保存玩家所有角色 
-    public List<SelectRoleInfo> AllRole = new List<SelectRoleInfo>();
+    public List<RoleServer> AllRole = new List<RoleServer>();
 }
 
 

@@ -21,6 +21,10 @@ public class Server : Singleton<Server>, IServer
 {
     IClient _client;
 
+    IDataBase _db;
+
+    public IDataBase DB { get => _db; }
+
 
     //消息类型，消息解析函数
     Dictionary<Type, Action<Cmd>> _parser = new Dictionary<Type, Action<Cmd>>();
@@ -32,6 +36,9 @@ public class Server : Singleton<Server>, IServer
 
     public Server()
     {
+        //数据库初始化
+        _db = SQLiteMgr.Instance;
+        _db.Init();
 
         //消息解析字典
 
