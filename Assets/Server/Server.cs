@@ -41,7 +41,6 @@ public class Server : Singleton<Server>, IServer
         _db.Init();
 
         //消息解析字典
-
         //登录消息
         _parser.Add(typeof(LoginCmd), CmdParser.OnLogin);
 

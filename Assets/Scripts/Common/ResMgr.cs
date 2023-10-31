@@ -36,5 +36,15 @@ public class ResMgr : Singleton<ResMgr>
     }
 
 
+    /// <summary>
+    /// 资源 释放
+    /// </summary>
+    public void Release(GameObject target)
+    {
+        //回收到缓冲池
+
+        //硬删除
+        GameObject.Destroy(target);
+    }
 
 }

@@ -23,8 +23,8 @@ public class Player
         //AllRole.Add(new SelectRoleInfo() { Name = "Loda2", ModelID = 2 });
         //AllRole.Add(new SelectRoleInfo() { Name = "Mipo3", ModelID = 3 });
 
-        AllRole.Add(new RoleServer() { Name = "Joe1", ModelID = 1 });
-        AllRole.Add(new RoleServer() { Name = "Loda2", ModelID = 2 });
-        AllRole.Add(new RoleServer() { Name = "Mipo3", ModelID = 3 });
+        //AllRole.Add(new RoleServer() { Name = "Joe1", ModelID = 1 });
+        //AllRole.Add(new RoleServer() { Name = "Loda2", ModelID = 2 });
+        //AllRole.Add(new RoleServer() { Name = "Mipo3", ModelID = 3 });
     }
 }

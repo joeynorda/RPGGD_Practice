@@ -54,10 +54,13 @@ public class SQLiteMgr : Singleton<SQLiteMgr>, IDataBase
 
         if (dataTable.Rows.Count <= 0) return null;
 
+        //table 数据 转化为一行 Convert.ToString(dataTable.Rows[0][0])
         string json = dataTable.Rows[0][0].ToString();
         return JsonMapper.ToObject<Player>(json);
     }
 
+
+    //保存数据到数据库
     public void SavePlayerData(Player playerData)
     {
         ExecuteNoQuery(string.Format(QueryDefine.INSERT_WITH_UPDATE, PlayerTableName, playerData.ThisID, JsonMapper.ToJson(playerData)));

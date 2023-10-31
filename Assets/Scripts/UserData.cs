@@ -27,6 +27,12 @@ public class UserData : Singleton<UserData>
         {
             //选人界面
             SceneManager.LoadScene("SelectRole");
+
+
+            //UIMgr.Instance.Remove();
+
+            //替换之前UI
+            UIMgr.Instance.Replace("UI/SelectRole/SelectRole", UILayer.Normal);
         }
         else
         {

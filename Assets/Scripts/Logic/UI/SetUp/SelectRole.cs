@@ -14,7 +14,7 @@ public class SelectRole : MonoBehaviour
     private string roleItemPath = "UI/SelectRole/RoleItem";
 
     private int _selectRoleIndex = -1;
-    private int _lastRoleIndex = 1;
+    private int _lastRoleIndex = 2;
 
     [SerializeField] private Transform _placeTrans;
 
@@ -28,16 +28,31 @@ public class SelectRole : MonoBehaviour
         _roleListToggleGroup = _roleListContent.GetComponent<ToggleGroup>();
         _modelTouchRotate = transform.Find<TouchRotate>("RawImage");
 
-        _modelTouchRotate.DragCallback = x => {
-            _placeTrans.Rotate(Vector3.up, -x.delta.x);
-        };
+
+        QuickCoroutine.Instance.StartCoroutine(Delay());
+    }
+
+
+
+
+    IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(1);
+        _placeTrans = ResMgr.Instance.GetInstance("UI/SelectRole/ModelStudio").Find<Transform>("PlacePoint");
 
         //初始化角色列表
         InitUserData();
 
-        _btnEnter.onClick.AddListener(OnBtnEnterClick);
+        _modelTouchRotate.DragCallback = x => {
+            _placeTrans.Rotate(Vector3.up, -x.delta.x);
+        };
 
+
+        _btnEnter.onClick.AddListener(OnBtnEnterClick);
     }
+
+
+
 
 
     private void InitUserData()
