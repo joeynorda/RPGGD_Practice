@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -62,12 +63,21 @@ public class UIMgr : Singleton<UIMgr>
     public GameObject Replace(string uipath,UILayer layer = UILayer.Normal)
     {
         //remove
-        _uiLayerRoot[layer].transform.ClearAllChilds();
+        RemoveLayer(layer);
 
         //Add
         return Add(uipath, layer);
     }
 
+
+    /// <summary>
+    /// 删除某一层级所有UI
+    /// </summary>
+    public void RemoveLayer(UILayer layer = UILayer.Normal)
+    {
+        //remove
+        _uiLayerRoot[layer].transform.ClearAllChilds();
+    }
 }
 
 

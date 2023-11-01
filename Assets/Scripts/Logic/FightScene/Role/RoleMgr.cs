@@ -33,6 +33,8 @@ public class RoleMgr : Singleton<RoleMgr>
         }
         MainRoleThisIDCmd mainRoleThisIDCmd = cmd as MainRoleThisIDCmd;
 
+        Debug.Log("<color=#7FFF00><size=12>" + $"客户端处理 MainRoleThisIDCmd" + "</size></color>");
+
         //记录当前主角thisid
         RoleMgr.Instance._mainRoleThisID = mainRoleThisIDCmd.ThisID;
 
@@ -47,6 +49,8 @@ public class RoleMgr : Singleton<RoleMgr>
             return;
         }
         CreateSceneRoleCmd createRole = cmd as CreateSceneRoleCmd;
+
+        Debug.Log("<color=#7FFF00><size=12>" + $"客户端 处理 CreateSceneRoleCmd" + "</size></color>");
 
         RoleDataBase roleDataBase = RoleTable.Instance[createRole.ModelID];
         if (roleDataBase == null)
@@ -68,6 +72,8 @@ public class RoleMgr : Singleton<RoleMgr>
         {
             //是主角
             role = roleObj.AddComponent<MainRole>();
+
+            SceneMgr.Instance.MainCameraControl.SetFollowTarget(role.transform);
         }
         else
         {
@@ -75,7 +81,9 @@ public class RoleMgr : Singleton<RoleMgr>
         }
 
        
+        //角色初始化
         role.Initialize(createRole, roleDataBase);
+
 
         //RoleMgr 管理场景中所有Role
         Instance.AllRole[createRole.ThisID] = role;

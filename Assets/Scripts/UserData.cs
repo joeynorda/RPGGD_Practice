@@ -12,6 +12,10 @@ public class UserData : Singleton<UserData>
 
     internal static void OnRoleList(Cmd cmd)
     {
+
+        Debug.Log("<color=#7FFF00><size=12>" + $"客户端接收到服务器发送的角色列表信息" + "</size></color>");
+
+
         //cmd -> LoginCmd
         if (!Net.CheckCmd(cmd, typeof(RoleListCmd)))
         {

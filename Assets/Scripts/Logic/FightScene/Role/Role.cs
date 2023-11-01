@@ -32,6 +32,8 @@ public class Role : MonoBehaviour
     CreateSceneRoleCmd _serverData; //服务器传递的角色index
     RoleDataBase _tableData;
 
+
+
     public void Initialize(CreateSceneRoleCmd createRole, RoleDataBase roleDataBase)
     {
         this._serverData = createRole;
@@ -63,10 +65,10 @@ public class Role : MonoBehaviour
 
         if (target == null) return;
 
-        _agent.SetDestination(target.position);
+        _agent.SetDestination(new Vector3(target.position.x,0,target.position.z));
         _animator.SetInteger(MOTIONTYPE, 1);
 
-        if (Vector3.Distance(transform.position, target.transform.position) <= GameSetting.STOP_DISTANCE)
+        if (Vector3.Distance(new Vector3(transform.position.x,0,transform.position.z), new Vector3( target.transform.position.x,0,target.transform.position.z)) <= GameSetting.STOP_DISTANCE)
         {
             _animator.SetInteger(MOTIONTYPE, 0);
         }

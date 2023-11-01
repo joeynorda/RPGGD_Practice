@@ -31,12 +31,12 @@ public class Login : MonoBehaviour
     {
 
         //·¢ËÍ
-        var account = _accountInput.text;
-        var password = _passwordInput.text;
-        if (string.IsNullOrEmpty(account) || string.IsNullOrEmpty(password))
-        {
-            return;
-        }
+        //var account = _accountInput.text;
+        //var password = _passwordInput.text;
+        //if (string.IsNullOrEmpty(account) || string.IsNullOrEmpty(password))
+        //{
+        //    return;
+        //}
 
         _accountInput.enabled = false;
         _passwordInput.enabled = false;

@@ -19,7 +19,14 @@ public class ResMgr : Singleton<ResMgr>
     /// <returns></returns>
     public GameObject GetInstance(string resPath)
     {
-        return GameObject.Instantiate(GetResources<GameObject>(resPath));
+
+        var tmp = GetResources<GameObject>(resPath);
+        if (tmp == null)
+        {
+            Debug.Log("<color=#EE2C2C><size=12>" + $"{resPath} Œ¥’“µΩ" + "</size></color>");
+            return null;
+        }
+        return GameObject.Instantiate(tmp);
     }
 
     /// <summary>

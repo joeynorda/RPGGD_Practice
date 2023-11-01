@@ -57,13 +57,12 @@ public class Net : Singleton<Net>, IClient
         _parser.Add(typeof(RoleListCmd), UserData.OnRoleList);
 
 
-        //当前主角id
-        _parser.Add(typeof(MainRoleThisIDCmd), RoleMgr.OnMainRoleThisid);
-
-
         //进入地图
         _parser.Add(typeof(EnterMapCmd), SceneMgr.OnEnterMap);
 
+
+        //当前主角id
+        _parser.Add(typeof(MainRoleThisIDCmd), RoleMgr.OnMainRoleThisid);
 
 
         //创建角色

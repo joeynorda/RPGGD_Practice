@@ -85,7 +85,7 @@ public static class CmdParser
         //向客户端发送一个能进场景的消息
 
         //1.告诉客户端进入的场景编号
-        var sceneID = 2;
+        var sceneID = 3;
         EnterMapCmd enterMapCmd = new EnterMapCmd() { MapID = sceneID };
         
 
@@ -106,7 +106,8 @@ public static class CmdParser
 
 
         //发送消息
-        Server.Instance.SendCmd(enterMapCmd);//告诉客户端进入新场景
+        Debug.Log("<color=#7FFF00><size=12>" + $"服务器发送进入新场景Cmd" + "</size></color>");
+        Server.Instance.SendCmd(enterMapCmd);//给客户端发送进入新场景Cmd 
 
 
 
@@ -116,10 +117,11 @@ public static class CmdParser
 
         //缓存剩下消息   //加载完成后 在分发消息
 
+        Debug.Log("<color=#7FFF00><size=12>" + $"服务端发送了 mainRoleThisIDCmd" + "</size></color>");
         Server.Instance.SendCmd(mainRoleThisIDCmd); //进入新场景后 才执行以后消息 服务器认为已经进入场景了 
 
-        //
-        
+
+        Debug.Log("<color=#7FFF00><size=12>" + $"服务端发送了 roleCmd" + "</size></color>");
         Server.Instance.SendCmd(roleCmd);
 
 

@@ -18,7 +18,7 @@ public class SelectRole : MonoBehaviour
 
     [SerializeField] private Transform _placeTrans;
 
-    private TouchRotate _modelTouchRotate;
+    private TouchEx _modelTouchRotate;
 
 
     private void Awake()
@@ -26,7 +26,7 @@ public class SelectRole : MonoBehaviour
         _roleListContent = transform.Find<Transform>("RoleList/Viewport/Content").gameObject;
         _btnEnter = transform.Find<Button>("BtnEnter");
         _roleListToggleGroup = _roleListContent.GetComponent<ToggleGroup>();
-        _modelTouchRotate = transform.Find<TouchRotate>("RawImage");
+        _modelTouchRotate = transform.Find<TouchEx>("RawImage");
 
 
         QuickCoroutine.Instance.StartCoroutine(Delay());

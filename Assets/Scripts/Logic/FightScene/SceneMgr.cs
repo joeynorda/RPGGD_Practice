@@ -18,6 +18,13 @@ using static Unity.Burst.Intrinsics.X86.Avx;
 /// </summary>
 internal class SceneMgr : Singleton<SceneMgr>
 {
+
+    public CameraControll MainCameraControl;
+
+
+
+
+
     public static void OnEnterMap(Cmd cmd)
     {
         if (!Net.CheckCmd(cmd, typeof(EnterMapCmd)))
@@ -27,7 +34,16 @@ internal class SceneMgr : Singleton<SceneMgr>
         EnterMapCmd enterMapCmd = cmd as EnterMapCmd;
 
 
-        Instance.LoadScene(enterMapCmd.MapID);
+        Debug.Log("<color=#7FFF00><size=12>" + $"客户端接收进入场景Cmd 开始进入场景" + "</size></color>");
+
+
+        //进入场景 Loading 界面 Load Progress..   UI -> TOP
+
+        //删除Normal层UI
+        UIMgr.Instance.RemoveLayer();
+
+
+        SceneMgr.Instance.LoadScene(enterMapCmd.MapID);
     }
 
     /// <summary>
@@ -43,6 +59,8 @@ internal class SceneMgr : Singleton<SceneMgr>
             return;
         }
 
+
+        Debug.Log("<color=#7FFF00><size=12>" + $"客户端阻塞接收的Cmd 不处理" + "</size></color>");
 
         //阻塞消息  暂时不处理
         Net.Instance.Pause = true;
@@ -69,12 +87,40 @@ internal class SceneMgr : Singleton<SceneMgr>
             yield return new WaitForEndOfFrame();
         }
 
-        Debug.Log("<color=#7FFF00><size=12>" + $"场景加载完毕!" + "</size></color>");
+        Debug.Log("<color=#7FFF00><size=12>" + $"场景加载完毕! 场景进入后 处理消息" + "</size></color>");
+
+
+        
+        //加载完毕
+        OnLoadEnd();
+
+    }
+
+    private void OnLoadEnd()
+    {
+
+        //初始化相机
+        InitCamera();
 
 
         //放开消息 进行分发
         Net.Instance.Pause = false;
 
+
+        //UI
+        FightUIMgr.Instance.Init();
+
+        //销毁loading
+
+    }
+
+
+
+    private void InitCamera()
+    {
+        //初始化摄像机
+        var cameraObj = ResMgr.Instance.GetInstance("SceneCamera");
+        MainCameraControl = cameraObj.GetComponent<CameraControll>();
     }
 }
 
