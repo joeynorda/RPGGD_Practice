@@ -103,3 +103,32 @@ public class CreateSceneRoleCmd:Cmd
     public Vector3 Pos;
     public Vector3 FaceTo;
 }
+
+
+
+
+
+
+//S->C
+//创建NPC
+public class CreateSomeNpcCmd : Cmd
+{
+    public int ThisID;
+
+    public string Name;
+
+    public int ModelID;
+
+    public Vector3 Pos;
+    public Vector3 FaceTo;
+}
+
+
+
+//C->S
+//客户端向服务端发送跳转场景请求
+public class JumpToMapCmd:Cmd
+{
+    //目标地图
+    public int ID;
+}

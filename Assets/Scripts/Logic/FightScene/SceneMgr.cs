@@ -103,13 +103,14 @@ internal class SceneMgr : Singleton<SceneMgr>
         InitCamera();
 
 
-        //放开消息 进行分发
-        Net.Instance.Pause = false;
-
-
         //UI
         FightUIMgr.Instance.Init();
 
+
+        //放开消息 进行分发
+        Net.Instance.Pause = false;
+
+       
         //销毁loading
 
     }

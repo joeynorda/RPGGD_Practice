@@ -68,7 +68,8 @@ public class Net : Singleton<Net>, IClient
         //创建角色
         _parser.Add(typeof(CreateSceneRoleCmd), RoleMgr.OnCreateSceneRole);
 
-
+        //创建NPC
+        _parser.Add(typeof(CreateSomeNpcCmd),NpcMgr.OnCreateSomeNpc);
     }
 
 

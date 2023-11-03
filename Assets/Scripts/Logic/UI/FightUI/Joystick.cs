@@ -49,6 +49,26 @@ public class Joystick
         _touchRotate.PointerDownCallback = OnPointerDownCallback;
         _touchRotate.PointerUpCallback = OnPointerUpCallback;
 
+     
+
+        //
+        //计时器 停止拖拽的时候 也需要发送移动
+        TimerMgr.Instance.CreateTimerAndStart(0.1f, -1, OnLoop);
+    }
+
+
+    //定时器 定时刷新 
+    private void OnLoop()
+    {
+
+        // 判断 小球在中心点  不移动 return
+        if (_dir == Vector2.zero)
+        {
+            return;
+        }
+
+        //告诉外界拖动方向  -> 移动方向
+        OnMoveDir?.Invoke(_dir);
     }
 
     private void OnPointerUpCallback(PointerEventData obj)
@@ -81,8 +101,5 @@ public class Joystick
 
         _innerBall.localPosition = _dir * Mathf.Min(dis,_radius);
 
-
-        //告诉外界拖动方向  -> 移动方向
-        OnMoveDir?.Invoke(_dir);
     }
 }

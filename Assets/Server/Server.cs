@@ -46,6 +46,9 @@ public class Server : Singleton<Server>, IServer
 
         //角色选择消息
         _parser.Add(typeof(SelectRoleCmd), CmdParser.OnSelectRole);
+
+        //场景跳转请求
+        _parser.Add(typeof(JumpToMapCmd), CmdParser.OnJumpMap);
     }
 
 

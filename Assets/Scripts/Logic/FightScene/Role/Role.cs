@@ -16,25 +16,23 @@ using UnityEngine.AI;
 public class Role : MonoBehaviour
 {
 
-    //目标点
-    public Transform target;
-
-    NavMeshAgent _agent;
+    protected NavMeshAgent _agent;
 
     Animator _animator;
 
     private const string MOTIONTYPE = "MotionType";
 
-
+    Vector3? targetPos=null;
 
 
     //引用  只读不写 不要修改
     CreateSceneRoleCmd _serverData; //服务器传递的角色index
     RoleDataBase _tableData;
 
+    public int ThisId { get => _serverData.ThisID; }
 
 
-    public void Initialize(CreateSceneRoleCmd createRole, RoleDataBase roleDataBase)
+    public virtual void Initialize(CreateSceneRoleCmd createRole, RoleDataBase roleDataBase)
     {
         this._serverData = createRole;
         this._tableData = roleDataBase;
@@ -43,6 +41,7 @@ public class Role : MonoBehaviour
         _agent.stoppingDistance = GameSetting.STOP_DISTANCE;
         _agent.speed = 5f;
         _agent.angularSpeed = float.MaxValue;       //角速度
+        _agent.acceleration = float.MaxValue;
 
         _animator = gameObject.GetComponent<Animator>();
        
@@ -56,6 +55,25 @@ public class Role : MonoBehaviour
     }
 
 
+    //移动至某一个点
+    public void PathTo(Vector3 target)
+    {
+        _agent.SetDestination(target);
+
+        targetPos = target;
+
+        SetAnimation(1);
+    }
+
+
+    //停止移动
+    public void StopMove()
+    {
+        _agent.isStopped = true;
+        _agent.ResetPath();
+        SetAnimation(0);
+        targetPos = null;
+    }
 
 
 
@@ -63,14 +81,32 @@ public class Role : MonoBehaviour
     private void Update()
     {
 
-        if (target == null) return;
+        if (targetPos == null) return;
 
-        _agent.SetDestination(new Vector3(target.position.x,0,target.position.z));
-        _animator.SetInteger(MOTIONTYPE, 1);
 
-        if (Vector3.Distance(new Vector3(transform.position.x,0,transform.position.z), new Vector3( target.transform.position.x,0,target.transform.position.z)) <= GameSetting.STOP_DISTANCE)
+        if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(targetPos.Value.x, 0, targetPos.Value.z)) < GameSetting.STOP_DISTANCE)
         {
-            _animator.SetInteger(MOTIONTYPE, 0);
+            OnArrived();
+            targetPos = null;
+            SetAnimation(0);
         }
+
+
+    }
+
+
+
+    //到达
+    private void OnArrived()
+    {
+        Debug.Log("<color=#7FFF00><size=12>" + $"到达" + "</size></color>");
+    }
+
+
+
+    //设置动画
+    private void SetAnimation(int motionType)
+    {
+        _animator.SetInteger(MOTIONTYPE, motionType);
     }
 }

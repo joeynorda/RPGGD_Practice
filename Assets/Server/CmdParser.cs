@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static Unity.Burst.Intrinsics.X86.Avx;
 
 //消息解析函数 未分模块的消息解析器
 public static class CmdParser
@@ -11,7 +12,7 @@ public static class CmdParser
 
 
     /// <summary>
-    /// 登录
+    /// 登录请求
     /// </summary>
     /// <param name="cmd"></param>
     public static void OnLogin(Cmd cmd)
@@ -65,7 +66,8 @@ public static class CmdParser
 
 
     /// <summary>
-    /// 角色选择
+    /// 接收到客户端的选择角色请求
+    /// 角色选择 后 进入场景
     /// </summary>
     /// <param name="cmd"></param>
     public static void OnSelectRole(Cmd cmd)
@@ -85,16 +87,17 @@ public static class CmdParser
         //向客户端发送一个能进场景的消息
 
         //1.告诉客户端进入的场景编号
-        var sceneID = 3;
-        EnterMapCmd enterMapCmd = new EnterMapCmd() { MapID = sceneID };
-        
+
 
         //2.分配ThisID 
         var thisid = RoleServer.GetNewThisID();
 
         //3.Thisid,//告诉客户端可操控角色 主角ID   主、配角 
         MainRoleThisIDCmd mainRoleThisIDCmd = new MainRoleThisIDCmd() { ThisID = thisid };
-        
+        Debug.Log("<color=#7FFF00><size=12>" + $"服务端发送了 mainRoleThisIDCmd" + "</size></color>");
+        Server.Instance.SendCmd(mainRoleThisIDCmd); //进入新场景后 才执行以后消息 服务器认为已经进入场景了 
+
+
 
         //4.生成主角 CreateSceneRole
         CreateSceneRoleCmd roleCmd = new CreateSceneRoleCmd();
@@ -107,6 +110,22 @@ public static class CmdParser
 
         //发送消息
         Debug.Log("<color=#7FFF00><size=12>" + $"服务器发送进入新场景Cmd" + "</size></color>");
+
+       
+
+        EnterScene(roleCmd);
+    }
+
+
+
+    /// <summary>
+    /// 进入场景
+    /// </summary>
+    /// <param name="roleCmd"></param>
+    private static void EnterScene(CreateSceneRoleCmd roleCmd)
+    {
+        var sceneID = 3;
+        EnterMapCmd enterMapCmd = new EnterMapCmd() { MapID = sceneID };
         Server.Instance.SendCmd(enterMapCmd);//给客户端发送进入新场景Cmd 
 
 
@@ -117,17 +136,74 @@ public static class CmdParser
 
         //缓存剩下消息   //加载完成后 在分发消息
 
-        Debug.Log("<color=#7FFF00><size=12>" + $"服务端发送了 mainRoleThisIDCmd" + "</size></color>");
-        Server.Instance.SendCmd(mainRoleThisIDCmd); //进入新场景后 才执行以后消息 服务器认为已经进入场景了 
-
+      
 
         Debug.Log("<color=#7FFF00><size=12>" + $"服务端发送了 roleCmd" + "</size></color>");
         Server.Instance.SendCmd(roleCmd);
 
 
         //5.生成附近的配角 (暂时不考虑)
+
+
         //6.生成附近的NPC
+        CreateSomeNpc();
+    }
+
+
+    /// <summary>
+    /// 接收到客户端发送的跳转地图请求
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    internal static void OnJumpMap(Cmd cmd)
+    {
+        if (!Net.CheckCmd(cmd, typeof(JumpToMapCmd)))
+        {
+            return;
+        }
+
+        JumpToMapCmd selectRoleCmd = cmd as JumpToMapCmd;
+
+        //验证坐标信息
+
+        //跳转
 
     }
 
+
+    /// <summary>
+    /// 创建NPC流程
+    /// S->C 发送CreateSomeNpcCmd
+    /// </summary>
+    private static void CreateSomeNpc()
+    {
+        var npc1Cmd = new CreateSomeNpcCmd();
+        npc1Cmd.ThisID = RoleServer.GetNewThisID();
+        npc1Cmd.ModelID = 1;
+        npc1Cmd.Name = NpcTable.Instance[npc1Cmd.ModelID].Name;
+        npc1Cmd.Pos = new Vector3(0,0,1);
+
+
+
+        var npc2Cmd = new CreateSomeNpcCmd();
+        npc2Cmd.ThisID = RoleServer.GetNewThisID();
+        npc2Cmd.ModelID = 2;
+        npc2Cmd.Name = NpcTable.Instance[npc2Cmd.ModelID].Name;
+        npc2Cmd.Pos = new Vector3(1, 0, 2);
+
+
+
+
+        var npc3Cmd = new CreateSomeNpcCmd();
+        npc3Cmd.ThisID = RoleServer.GetNewThisID();
+        npc3Cmd.ModelID = 3;
+        npc3Cmd.Name = NpcTable.Instance[npc3Cmd.ModelID].Name;
+        npc3Cmd.Pos = new Vector3(2, 0, 0);
+
+
+
+        Server.Instance.SendCmd(npc1Cmd);
+        Server.Instance.SendCmd(npc2Cmd);
+        Server.Instance.SendCmd(npc3Cmd);
+    }
 }
