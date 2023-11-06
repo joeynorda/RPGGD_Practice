@@ -35,4 +35,16 @@ public class NpcMgr:Singleton<NpcMgr>
         NpcMgr.Instance.AllNpc[npc.ThisId] = npc;
     }
 
+
+    /// <summary>
+    /// 场景跳转时 清理所有的NPC
+    /// </summary>
+    internal void Reset()
+    {
+        foreach (var npc in AllNpc.Values)
+        {
+            ResMgr.Instance.Release(npc.gameObject);
+        }
+        NpcMgr.Instance.AllNpc.Clear();
+    }
 }

@@ -15,9 +15,6 @@ public class JumpMapPoint : MonoBehaviour
             return;
         }
 
-
         other.gameObject.GetComponent<MainRole>().OnJumpTo(JumpToMapID);
-
-      
     }
 }

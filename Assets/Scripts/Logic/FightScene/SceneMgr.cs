@@ -22,9 +22,24 @@ internal class SceneMgr : Singleton<SceneMgr>
     public CameraControll MainCameraControl;
 
 
+    //重置模块：
+    //RoleMgr、 摇杆事件/摇杆状态、场景触摸事件、UI事件系统
+    private static void Reset()
+    {
+        //删除Normal层UI
+        UIMgr.Instance.RemoveLayer();
+
+        RoleMgr.Instance.Reset();
+        NpcMgr.Instance.Reset();
+        FightUIMgr.Instance.Reset();
+
+        //场景跳转重置相关
+
+    }
 
 
 
+    //第一次进地图 初始化相关
     public static void OnEnterMap(Cmd cmd)
     {
         if (!Net.CheckCmd(cmd, typeof(EnterMapCmd)))
@@ -37,11 +52,10 @@ internal class SceneMgr : Singleton<SceneMgr>
         Debug.Log("<color=#7FFF00><size=12>" + $"客户端接收进入场景Cmd 开始进入场景" + "</size></color>");
 
 
-        //进入场景 Loading 界面 Load Progress..   UI -> TOP
+      
 
-        //删除Normal层UI
-        UIMgr.Instance.RemoveLayer();
-
+        //场景重置
+        Reset();
 
         SceneMgr.Instance.LoadScene(enterMapCmd.MapID);
     }
@@ -62,8 +76,19 @@ internal class SceneMgr : Singleton<SceneMgr>
 
         Debug.Log("<color=#7FFF00><size=12>" + $"客户端阻塞接收的Cmd 不处理" + "</size></color>");
 
+
+
+        //关闭EventSystem
+        UIMgr.Instance.UIEventSystemEnabled = false;
+
+
         //阻塞消息  暂时不处理
         Net.Instance.Pause = true;
+
+
+
+        //进入场景 Loading 界面 Load Progress..   UI -> TOP
+
 
 
 
@@ -75,6 +100,10 @@ internal class SceneMgr : Singleton<SceneMgr>
 
         //SceneManager.LoadScene(mapData.ScenePath);
     }
+
+
+
+
 
 
     //异步判断
@@ -110,7 +139,10 @@ internal class SceneMgr : Singleton<SceneMgr>
         //放开消息 进行分发
         Net.Instance.Pause = false;
 
-       
+
+        //打开UIEvent System
+        UIMgr.Instance.UIEventSystemEnabled = true;
+
         //销毁loading
 
     }

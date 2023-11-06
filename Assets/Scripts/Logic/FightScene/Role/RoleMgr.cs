@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static Unity.Burst.Intrinsics.X86.Avx;
 
 
@@ -17,7 +18,14 @@ using static Unity.Burst.Intrinsics.X86.Avx;
 public class RoleMgr : Singleton<RoleMgr>
 {
 
-    int _mainRoleThisID;
+    public int _mainRoleThisID;
+
+    private  MainRole _mainRole;
+
+    public  MainRole MainRole
+    {
+        get => _mainRole;
+    }
 
     //thisID,role
     public Dictionary<int, Role> AllRole = new Dictionary<int, Role>();
@@ -71,7 +79,9 @@ public class RoleMgr : Singleton<RoleMgr>
         if (RoleMgr.Instance._mainRoleThisID == createRole.ThisID)
         {
             //是主角
-            role = roleObj.AddComponent<MainRole>();
+            Instance._mainRole = roleObj.AddComponent<MainRole>();
+
+            role = Instance._mainRole ;
 
             SceneMgr.Instance.MainCameraControl.SetFollowTarget(role.transform);
         }
@@ -89,5 +99,18 @@ public class RoleMgr : Singleton<RoleMgr>
         Instance.AllRole[createRole.ThisID] = role;
         
 
+    }
+
+
+    //场景切换时 角色重置
+    internal void Reset()
+    {
+
+        //资源回收
+        foreach (var role in RoleMgr.Instance.AllRole)
+        {
+            ResMgr.Instance.Release(role.Value.gameObject);
+        }
+        RoleMgr.Instance.AllRole.Clear();
     }
 }

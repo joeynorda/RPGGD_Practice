@@ -17,7 +17,12 @@ public static class UnityExtension  //开放修改   扩展方法
     /// <returns></returns>
     public static T Find<T>(this GameObject parent, string path)
     {
-        return parent.transform.Find(path).GetComponent<T>();
+        var targetObj = parent.transform.Find(path);
+        if (targetObj == null)
+        {
+            return default(T);
+        }
+        return targetObj.GetComponent<T>();
     }
 
 
@@ -43,6 +48,23 @@ public static class UnityExtension  //开放修改   扩展方法
         for (int i = 0; i < parentTrans.childCount; i++)
         {
             UnityEngine.GameObject.Destroy(parentTrans.GetChild(i).gameObject);
+        }
+    }
+
+    /// <summary>
+    /// 设定layer
+    /// </summary>
+    /// <param name="trans"></param>
+    /// <param name="layer"></param>
+    public static void SetChildLayer(this Transform trans, int layer)
+    {
+        if (trans != null)
+        {
+            trans.gameObject.layer = layer;
+            for (int i = 0; i < trans.childCount; i++)
+            {
+                trans.GetChild(i).gameObject.layer = layer;
+            }
         }
     }
 

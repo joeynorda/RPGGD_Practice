@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Unity.Burst.Intrinsics.X86.Avx;
 
@@ -79,9 +80,16 @@ public static class CmdParser
 
         SelectRoleCmd selectRoleCmd = cmd as SelectRoleCmd;
 
+        //服务器当前 晚间
+        var curPlayer = Server.Instance.CurPlayer;
 
-        //获取服务器当前 角色信息
-        RoleServer curRole = Server.Instance.CurPlayer.AllRole[selectRoleCmd.Index];
+
+        //获取服务器当前 选中角色信息
+        RoleServer curRole = curPlayer.AllRole[selectRoleCmd.Index];
+
+
+        //当前选定的角色
+        curPlayer.CurRole = curRole;
 
 
         //向客户端发送一个能进场景的消息
@@ -91,6 +99,7 @@ public static class CmdParser
 
         //2.分配ThisID 
         var thisid = RoleServer.GetNewThisID();
+        curPlayer.CurRole.ThisID = thisid;
 
         //3.Thisid,//告诉客户端可操控角色 主角ID   主、配角 
         MainRoleThisIDCmd mainRoleThisIDCmd = new MainRoleThisIDCmd() { ThisID = thisid };
@@ -99,9 +108,28 @@ public static class CmdParser
 
 
 
+
+       
+        //进入场景
+        EnterMap(curRole);
+    }
+
+
+
+    /// <summary>
+    /// 进入场景
+    /// </summary>
+    /// <param name="roleCmd"></param>
+    private static void EnterMap(RoleServer curRole)
+    {
+        var sceneID = 3;
+        EnterMapCmd enterMapCmd = new EnterMapCmd() { MapID = sceneID };
+        Server.Instance.SendCmd(enterMapCmd);//给客户端发送进入新场景Cmd 
+
+
         //4.生成主角 CreateSceneRole
         CreateSceneRoleCmd roleCmd = new CreateSceneRoleCmd();
-        roleCmd.ThisID = thisid;
+        roleCmd.ThisID = curRole.ThisID;
         roleCmd.Name = curRole.Name;
         roleCmd.ModelID = curRole.ModelID;
         roleCmd.Pos = Vector3.zero;
@@ -111,32 +139,13 @@ public static class CmdParser
         //发送消息
         Debug.Log("<color=#7FFF00><size=12>" + $"服务器发送进入新场景Cmd" + "</size></color>");
 
-       
-
-        EnterScene(roleCmd);
-    }
-
-
-
-    /// <summary>
-    /// 进入场景
-    /// </summary>
-    /// <param name="roleCmd"></param>
-    private static void EnterScene(CreateSceneRoleCmd roleCmd)
-    {
-        var sceneID = 3;
-        EnterMapCmd enterMapCmd = new EnterMapCmd() { MapID = sceneID };
-        Server.Instance.SendCmd(enterMapCmd);//给客户端发送进入新场景Cmd 
-
-
-
         // 场景加载完毕后 再执行剩下的消息
 
         //客户端加载慢   
 
         //缓存剩下消息   //加载完成后 在分发消息
 
-      
+
 
         Debug.Log("<color=#7FFF00><size=12>" + $"服务端发送了 roleCmd" + "</size></color>");
         Server.Instance.SendCmd(roleCmd);
@@ -166,7 +175,9 @@ public static class CmdParser
 
         //验证坐标信息
 
-        //跳转
+
+        //跳转地图
+        EnterMap(Server.Instance.CurPlayer.CurRole);
 
     }
 

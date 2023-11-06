@@ -25,8 +25,10 @@ public class MainRole : Role
 
         //UI 创建要比主角 早
 
-        gameObject.layer = LayerMask.NameToLayer("MainRole");
+        //gameObject.layer = GameSetting.MainRoleLayer;
 
+        //同时设置子物体 layer
+        gameObject.transform.SetChildLayer(GameSetting.MainRoleLayer);
 
         BindingControlEvent();
 
@@ -54,7 +56,7 @@ public class MainRole : Role
     //移动
     void OnJoystickMove(Vector2 dir)
     {
-        Debug.Log("<color=#7FFF00><size=12>" + $"{dir}" + "</size></color>");
+        //Debug.Log("<color=#7FFF00><size=12>" + $"{dir}" + "</size></color>");
 
         //计算目标点
 
@@ -78,7 +80,7 @@ public class MainRole : Role
     }
 
 
-    //场景跳转请求
+    //场景跳转请求  C->S
     public void OnJumpTo(int jumpToMapID)
     {
         //发送跳转场景请求

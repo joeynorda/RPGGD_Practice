@@ -2,13 +2,28 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 
 //UI管理
 public class UIMgr : Singleton<UIMgr>
 {
-    GameObject _uiRoot;
 
+
+    //重置EventSystem 解决 点击UI 事件粘滞 
+    public bool UIEventSystemEnabled
+    {
+        set { _eventSystem.enabled = value; }
+        get { return _eventSystem.enabled; }
+    }
+
+
+
+
+
+
+    GameObject _uiRoot;
+    EventSystem _eventSystem;
 
     //保存UI层级
     //快速索引  层次，根节点 
@@ -20,6 +35,7 @@ public class UIMgr : Singleton<UIMgr>
         {
             _uiRoot = ResMgr.Instance.GetInstance("UI/UISystem");
             GameObject.DontDestroyOnLoad(_uiRoot);
+            _eventSystem = _uiRoot.Find<EventSystem>("EventSystem");
         }
 
         //UI 分5层

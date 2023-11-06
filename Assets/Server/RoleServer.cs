@@ -27,6 +27,10 @@ public class RoleServer
     }
 
 
+    public int ThisID;
+
+
+
     public string Name;     //角色名
     public int ModelID;  //模型ID
 

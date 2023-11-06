@@ -31,17 +31,6 @@ public class GameEngine : MonoBehaviour
     {
         //定时器刷新 驱动定时器
         TimerMgr.Instance.Loop(Time.deltaTime);
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (timer1._isRunning)
-            {
-                timer1.StopTick();
-            }
-            else
-            {
-                timer1.StartTick();
-            }
-        }
+        
     }
 }

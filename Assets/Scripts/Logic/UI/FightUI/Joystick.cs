@@ -73,9 +73,8 @@ public class Joystick
 
     private void OnPointerUpCallback(PointerEventData obj)
     {
-        _innerBall.localPosition = _centerPos;
-
-        _dir = Vector2.zero;
+        //小球归位
+        Reset();
 
         //移动结束
         OnMoveEnd?.Invoke();
@@ -101,5 +100,12 @@ public class Joystick
 
         _innerBall.localPosition = _dir * Mathf.Min(dis,_radius);
 
+    }
+
+    /// 摇杆归位
+    internal void Reset()
+    {
+        _innerBall.localPosition = _centerPos;
+        _dir = Vector2.zero;
     }
 }

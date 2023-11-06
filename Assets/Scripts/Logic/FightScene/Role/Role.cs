@@ -26,10 +26,17 @@ public class Role : MonoBehaviour
 
 
     //引用  只读不写 不要修改
-    CreateSceneRoleCmd _serverData; //服务器传递的角色index
-    RoleDataBase _tableData;
+    CreateSceneRoleCmd _serverData; //服务器传递的角色index 动态数据
+    RoleDataBase _tableData; //表里的静态数据
+
+
+
 
     public int ThisId { get => _serverData.ThisID; }
+
+
+    //模型路径
+    public string ModelPath { get => _tableData.ModelPath; }
 
 
     public virtual void Initialize(CreateSceneRoleCmd createRole, RoleDataBase roleDataBase)

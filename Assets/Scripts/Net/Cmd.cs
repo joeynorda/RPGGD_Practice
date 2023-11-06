@@ -132,3 +132,12 @@ public class JumpToMapCmd:Cmd
     //目标地图
     public int ID;
 }
+
+
+//S->C
+//服务端返回给客户端一个新消息 切换地图的消息
+//允许客户端跳入某个地图
+public class SwitchMapCmd : Cmd
+{
+    public int MapID;
+}

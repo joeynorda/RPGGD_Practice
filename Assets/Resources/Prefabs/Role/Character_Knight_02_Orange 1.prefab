@@ -406,6 +406,7 @@ GameObject:
   m_Component:
   - component: {fileID: 400990}
   - component: {fileID: 9559386}
+  - component: {fileID: 7651630289993592475}
   m_Layer: 0
   m_Name: Character_Knight_02_Orange 1
   m_TagString: Untagged
@@ -454,6 +455,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!136 &7651630289993592475
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107972}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.3
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &108134
 GameObject:
   m_ObjectHideFlags: 0

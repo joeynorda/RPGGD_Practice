@@ -16,6 +16,9 @@ public class Player
     //持有玩家 所拥有的角色列表 假的角色数据
     public List<RoleServer> AllRole = new List<RoleServer>();
 
+    //当前玩家选中的角色
+    public RoleServer CurRole;
+
 
     public Player()
     {

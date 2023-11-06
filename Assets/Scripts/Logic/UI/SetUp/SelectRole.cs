@@ -16,6 +16,10 @@ public class SelectRole : MonoBehaviour
     private int _selectRoleIndex = -1;
     private int _lastRoleIndex = 2;
 
+
+    ModelStudio _modelStudio;
+
+
     [SerializeField] private Transform _placeTrans;
 
     private TouchEx _modelTouchRotate;
@@ -38,7 +42,11 @@ public class SelectRole : MonoBehaviour
     IEnumerator Delay()
     {
         yield return new WaitForSeconds(1);
-        _placeTrans = ResMgr.Instance.GetInstance("UI/SelectRole/ModelStudio").Find<Transform>("PlacePoint");
+        //_placeTrans = ResMgr.Instance.GetInstance("UI/SelectRole/ModelStudio").Find<Transform>("PlacePoint");
+
+        _modelStudio = new ModelStudio();
+        _modelStudio.Init();
+        _placeTrans = _modelStudio.PlaceTrans;
 
         //初始化角色列表
         InitUserData();
@@ -75,6 +83,7 @@ public class SelectRole : MonoBehaviour
             ++i;
             toggle.onValueChanged.AddListener((isOn)=>OnToggleValueChanged(roleIndex,isOn));
 
+
             roleItem.transform.SetParent(_roleListContent.transform);
 
             toggle.isOn = roleIndex == _lastRoleIndex;
@@ -90,7 +99,7 @@ public class SelectRole : MonoBehaviour
             if (index == _selectRoleIndex) return;
 
             //先清除之前留下的模型  清空子节点
-            _placeTrans.ClearAllChilds();
+            _modelStudio.ClearModel();
 
             _selectRoleIndex = index;
 
@@ -101,8 +110,8 @@ public class SelectRole : MonoBehaviour
 
             var model = ResMgr.Instance.GetInstance(modelPath);
 
-            //var model = GameObject.Instantiate(Resources.Load<GameObject>(curRoleInfo.ModelPath));
-            model.transform.SetParent(_placeTrans, false);
+
+            _modelStudio.SetModel(model);
         }
     }
 
